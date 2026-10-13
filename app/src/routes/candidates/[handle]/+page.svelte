@@ -161,8 +161,8 @@
         PR #{data.candidate.nominationPrNumber}
       </a>
       <a
-        href="https://github.com/NixOS/SC-election-2026/blob/main/candidates/{data
-          .candidate.githubHandle}.md"
+        href="https://github.com/NixOS/SC-election-2026/blob/main/{data.candidate
+          .sourcePath ?? `candidates/${data.candidate.githubHandle}.md`}"
         target="_blank"
         rel="noopener noreferrer"
         class="underline hover:no-underline"

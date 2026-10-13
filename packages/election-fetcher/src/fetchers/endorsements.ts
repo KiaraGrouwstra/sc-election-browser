@@ -1,7 +1,7 @@
 import { octokit, REPO_OWNER, REPO_NAME } from "../github.js";
 import { db, updateLastFetchTime } from "../db.js";
-import { candidates } from "@sc-election/db";
-import { eq, sql } from "drizzle-orm";
+import { candidates, candidateHandleIs } from "@sc-election/db";
+import { eq } from "drizzle-orm";
 import { parseNomineeHandle } from "../parsers/nomination.js";
 
 export async function fetchEndorsements() {
@@ -74,13 +74,7 @@ export async function fetchEndorsements() {
       const [candidate] = await db
         .select()
         .from(candidates)
-        // GitHub handles are case-insensitive.
-        .where(
-          eq(
-            sql`lower(${candidates.githubHandle})`,
-            nomineeHandle.toLowerCase(),
-          ),
-        )
+        .where(candidateHandleIs(nomineeHandle))
         .limit(1);
 
       if (candidate) {
