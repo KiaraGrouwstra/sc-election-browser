@@ -1,7 +1,8 @@
 import { octokit, REPO_OWNER, REPO_NAME } from "../github.js";
 import { db, updateLastFetchTime } from "../db.js";
 import { candidates } from "@sc-election/db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+import { parseNomineeHandle } from "../parsers/nomination.js";
 
 export async function fetchEndorsements() {
   console.log("Fetching endorsements from nomination PRs...");
@@ -40,11 +41,7 @@ export async function fetchEndorsements() {
     for (const pr of nominationPRs) {
       console.log(`Processing PR #${pr.number}: ${pr.title}`);
 
-      const nomineeHandle = pr.title
-        .replace(/^Nominate\s+/i, "")
-        .trim()
-        .replace(/^@/, "")
-        .replace(/^`|`$/g, "");
+      const nomineeHandle = parseNomineeHandle(pr.title);
       const nominatedBy = pr.user?.login.replace(/^@/, "");
 
       if (!nominatedBy) {
@@ -77,7 +74,13 @@ export async function fetchEndorsements() {
       const [candidate] = await db
         .select()
         .from(candidates)
-        .where(eq(candidates.githubHandle, nomineeHandle))
+        // GitHub handles are case-insensitive.
+        .where(
+          eq(
+            sql`lower(${candidates.githubHandle})`,
+            nomineeHandle.toLowerCase(),
+          ),
+        )
         .limit(1);
 
       if (candidate) {
