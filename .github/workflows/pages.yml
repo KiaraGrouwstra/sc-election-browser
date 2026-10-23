@@ -1,0 +1,65 @@
+# Fetch the election data and publish a static build of the site to GitHub Pages.
+name: Pages
+
+on:
+  push:
+    branches: [pages]
+  schedule:
+    # Same interval as the fetcher timer in `nix/nixos/configuration.nix`.
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: pages
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: Fetch election data
+        env:
+          DATABASE_URL: file:${{ runner.temp }}/election.db
+          MIGRATIONS_DIR: ${{ github.workspace }}/drizzle
+          GITHUB_TOKEN: ${{ github.token }}
+        run: pnpm --filter @sc-election/fetcher start fetch-all
+      - name: Build static site
+        working-directory: app
+        env:
+          DATABASE_URL: file:${{ runner.temp }}/election.db
+          MIGRATIONS_DIR: ${{ github.workspace }}/drizzle
+          STATIC_BUILD: "true"
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          PRERENDER_ORIGIN: ${{ steps.pages.outputs.origin }}
+        run: pnpm build
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: app/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
