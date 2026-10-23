@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
   import { page } from "$app/state";
 </script>
 
@@ -17,7 +18,7 @@
           : page.error?.message || "An unexpected error occurred."}
       </p>
       <a
-        href="/"
+        href={resolve("/")}
         class="px-3 py-1.5 border border-gray-400 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       >
         <span class="font-mono mr-2">←</span>Back to home

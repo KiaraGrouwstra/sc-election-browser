@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
   import { goto } from "$app/navigation";
   import MetaTags from "$lib/components/MetaTags.svelte";
 
@@ -78,12 +79,12 @@
             <li class="py-2">
               <div
                 class="block border-1 border-transparent hover:border-black dark:hover:border-white p-4 -m-4 transition-colors cursor-pointer"
-                onclick={() => goto(`/candidates/${candidate.githubHandle}`)}
+                onclick={() => goto(resolve(`/candidates/${candidate.githubHandle}`))}
                 role="link"
                 tabindex="0"
                 onkeydown={(e) =>
                   e.key === "Enter" &&
-                  goto(`/candidates/${candidate.githubHandle}`)}
+                  goto(resolve(`/candidates/${candidate.githubHandle}`))}
               >
                 <h3 class="text-lg md:text-xl lg:text-2xl font-bold mb-1">
                   {candidate.name}
@@ -122,12 +123,12 @@
             <li class="py-2">
               <div
                 class="block border-1 border-transparent hover:border-black dark:hover:border-white p-4 -m-4 transition-colors cursor-pointer"
-                onclick={() => goto(`/questions/${question.issueNumber}`)}
+                onclick={() => goto(resolve(`/questions/${question.issueNumber}`))}
                 role="link"
                 tabindex="0"
                 onkeydown={(e) =>
                   e.key === "Enter" &&
-                  goto(`/questions/${question.issueNumber}`)}
+                  goto(resolve(`/questions/${question.issueNumber}`))}
               >
                 <p
                   class="text-sm text-gray-700 dark:text-gray-300 mb-2 space-x-2"

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
   import { renderMarkdown } from "$lib/markdown";
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
@@ -62,13 +63,13 @@
 
     if (event.key === "ArrowLeft" && currentIndex > 0) {
       const prevCandidate = data.allCandidates[currentIndex - 1];
-      goto(`/candidates/${prevCandidate.githubHandle}${hash}`);
+      goto(resolve(`/candidates/${prevCandidate.githubHandle}${hash}`));
     } else if (
       event.key === "ArrowRight" &&
       currentIndex < data.allCandidates.length - 1
     ) {
       const nextCandidate = data.allCandidates[currentIndex + 1];
-      goto(`/candidates/${nextCandidate.githubHandle}${hash}`);
+      goto(resolve(`/candidates/${nextCandidate.githubHandle}${hash}`));
     }
   }
 
@@ -101,7 +102,7 @@
   <header class="max-w-7xl mx-auto py-8 md:py-10 lg:py-12 px-4 md:px-6 lg:px-8">
     <div class="mb-6 md:mb-10 lg:mb-12 flex items-center justify-between">
       <a
-        href="/"
+        href={resolve("/")}
         class="px-3 py-1.5 border border-gray-400 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         ><span class="font-mono mr-2">←</span>Back to home</a
       >
@@ -118,7 +119,7 @@
             if (currentIndex > 0) {
               const prevCandidate = data.allCandidates[currentIndex - 1];
               goto(
-                `/candidates/${prevCandidate.githubHandle}${window.location.hash}`,
+                resolve(`/candidates/${prevCandidate.githubHandle}${window.location.hash}`),
               );
             }
           }}
@@ -139,7 +140,7 @@
             if (currentIndex < data.allCandidates.length - 1) {
               const nextCandidate = data.allCandidates[currentIndex + 1];
               goto(
-                `/candidates/${nextCandidate.githubHandle}${window.location.hash}`,
+                resolve(`/candidates/${nextCandidate.githubHandle}${window.location.hash}`),
               );
             }
           }}
@@ -331,7 +332,7 @@
               </p>
               <h3 class="text-lg md:text-xl lg:text-2xl font-bold mb-3 md:mb-4">
                 <a
-                  href="/questions/{response.question.issueNumber}"
+                  href={resolve(`/questions/${response.question.issueNumber}`)}
                   class="hover:underline"
                 >
                   {response.question.title}

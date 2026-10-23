@@ -3,6 +3,14 @@ import { db } from "$lib/server/db/index.js";
 import { questions, candidateResponses, candidates } from "@sc-election/db";
 import { eq, asc } from "drizzle-orm";
 
+/** Give the pages to prerender in a static build. */
+export async function entries() {
+  const rows = await db
+    .select({ issueNumber: questions.issueNumber })
+    .from(questions);
+  return rows.map((row) => ({ id: String(row.issueNumber) }));
+}
+
 export async function load({ params }) {
   const issueNumber = parseInt(params.id);
 

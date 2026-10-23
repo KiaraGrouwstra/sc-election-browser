@@ -40,13 +40,17 @@
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:title" content={fullTitle} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={ogImageUrl()} />
+  {#if page.data.ogImages}
+    <meta property="og:image" content={ogImageUrl()} />
+  {/if}
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:card" content={page.data.ogImages ? "summary_large_image" : "summary"} />
   <meta name="twitter:domain" content={page.url.hostname} />
   <meta name="twitter:url" content={canonicalUrl} />
   <meta name="twitter:title" content={fullTitle} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={ogImageUrl()} />
+  {#if page.data.ogImages}
+    <meta name="twitter:image" content={ogImageUrl()} />
+  {/if}
 </svelte:head>

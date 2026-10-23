@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
   import "../app.css";
   import favicon from "$lib/assets/favicon.svg";
   import ThemeToggle from "$lib/components/ThemeToggle.svelte";
@@ -94,7 +95,7 @@
       >
         View Source
       </a>
-      <a href="/privacy" class="underline hover:no-underline">
+      <a href={resolve("/privacy")} class="underline hover:no-underline">
         Privacy Notice
       </a>
     </p>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
   import { goto } from "$app/navigation";
 </script>
 
@@ -8,7 +9,7 @@
   >
     <div class="mb-8">
       <button
-        onclick={() => goto("/")}
+        onclick={() => goto(resolve("/"))}
         class="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline hover:no-underline"
       >
         ← Back to Home

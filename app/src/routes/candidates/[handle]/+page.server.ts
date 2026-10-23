@@ -8,6 +8,14 @@ import {
 } from "@sc-election/db";
 import { eq, sql, asc } from "drizzle-orm";
 
+/** Give the pages to prerender in a static build. */
+export async function entries() {
+  const rows = await db
+    .select({ handle: candidates.githubHandle })
+    .from(candidates);
+  return rows;
+}
+
 export async function load({ params }) {
   const { handle } = params;
 

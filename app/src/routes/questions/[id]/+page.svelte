@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
   import { renderMarkdown } from "$lib/markdown";
   import { goto } from "$app/navigation";
   import HashLink from "$lib/components/HashLink.svelte";
@@ -34,13 +35,13 @@
 
     if (event.key === "ArrowLeft" && currentIndex > 0) {
       const prevQuestion = data.allQuestions[currentIndex - 1];
-      goto(`/questions/${prevQuestion.issueNumber}${hash}`);
+      goto(resolve(`/questions/${prevQuestion.issueNumber}${hash}`));
     } else if (
       event.key === "ArrowRight" &&
       currentIndex < data.allQuestions.length - 1
     ) {
       const nextQuestion = data.allQuestions[currentIndex + 1];
-      goto(`/questions/${nextQuestion.issueNumber}${hash}`);
+      goto(resolve(`/questions/${nextQuestion.issueNumber}${hash}`));
     }
   }
 </script>
@@ -60,7 +61,7 @@
 <div class="font-sans">
   <header class="max-w-7xl mx-auto py-8 md:py-10 lg:py-12 px-4 md:px-6 lg:px-8">
     <div class="mb-6 md:mb-10 lg:mb-12 flex items-center justify-between">
-      <a href="/" class="px-3 py-1.5 border border-gray-400 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"><span class="font-mono mr-2">←</span>Back to home</a>
+      <a href={resolve("/")} class="px-3 py-1.5 border border-gray-400 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"><span class="font-mono mr-2">←</span>Back to home</a>
       <div class="hidden md:flex items-center gap-1 text-sm">
         <button
           class="px-3 py-1.5 border border-gray-400 dark:border-gray-600 rounded font-mono hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
@@ -73,7 +74,7 @@
             );
             if (currentIndex > 0) {
               const prevQuestion = data.allQuestions[currentIndex - 1];
-              goto(`/questions/${prevQuestion.issueNumber}${window.location.hash}`);
+              goto(resolve(`/questions/${prevQuestion.issueNumber}${window.location.hash}`));
             }
           }}
           aria-label="Previous question"
@@ -92,7 +93,7 @@
             );
             if (currentIndex < data.allQuestions.length - 1) {
               const nextQuestion = data.allQuestions[currentIndex + 1];
-              goto(`/questions/${nextQuestion.issueNumber}${window.location.hash}`);
+              goto(resolve(`/questions/${nextQuestion.issueNumber}${window.location.hash}`));
             }
           }}
           aria-label="Next question"
@@ -175,7 +176,7 @@
               </p>
               <h3 class="text-lg md:text-xl lg:text-2xl font-bold mt-2 md:mt-3 group flex items-center gap-3">
                 <a
-                  href="/candidates/{response.candidate.githubHandle}"
+                  href={resolve(`/candidates/${response.candidate.githubHandle}`)}
                   class="hover:underline"
                 >
                   {response.candidate.name}
