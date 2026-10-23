@@ -7,10 +7,18 @@
 
   let { children, data } = $props();
 
+  // Set again in the browser, because a prerendered page keeps the time of the build.
+  let now = $state(Date.now());
+
+  $effect(() => {
+    now = Date.now();
+    const timer = setInterval(() => (now = Date.now()), 60000);
+    return () => clearInterval(timer);
+  });
+
   function formatLastUpdated(isoString: string): string {
     const date = new Date(isoString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
+    const diffMs = now - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
